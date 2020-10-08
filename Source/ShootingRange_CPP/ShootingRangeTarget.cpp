@@ -24,19 +24,19 @@ void AShootingRangeTarget::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (CurveFloat != nullptr)
+	if (DegreeCurve != nullptr)
 	{
-		FOnTimelineFloat TimelineProgress;
-		TimelineProgress.BindUFunction(this, TEXT("TimelineProgress"));
-		CurveTimeline.AddInterpFloat(CurveFloat, TimelineProgress);
-		CurveTimeline.SetLooping(false);
+		FOnTimelineFloat TimelineDelegate;
+		TimelineDelegate.BindUFunction(this, TEXT("SetBoardRotation"));
+		TargetTimeline.AddInterpFloat(DegreeCurve, TimelineDelegate);
+		TargetTimeline.SetLooping(false);
 	}
 }
 
 void AShootingRangeTarget::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	CurveTimeline.TickTimeline(DeltaTime);
+	TargetTimeline.TickTimeline(DeltaTime);
 }
 
 void AShootingRangeTarget::TargetTransform(bool IsUp)
@@ -44,16 +44,16 @@ void AShootingRangeTarget::TargetTransform(bool IsUp)
 	if (IsUp)
 	{
 		CanHit = true;
-		CurveTimeline.Play();
+		TargetTimeline.Play();
 	}
 	else
 	{
 		CanHit = false;
-		CurveTimeline.Reverse();
+		TargetTimeline.Reverse();
 	}
 }
 
-void AShootingRangeTarget::TimelineProgress(float Value)
+void AShootingRangeTarget::SetBoardRotation(float Value)
 {
 	Board->SetRelativeRotation(FRotator(Value, 0.0f, 0.0f));
 }

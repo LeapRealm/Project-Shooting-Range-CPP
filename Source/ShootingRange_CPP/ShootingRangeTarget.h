@@ -22,13 +22,13 @@ public:
 	void TargetTransform(bool IsUp);
 
 	UFUNCTION()
-	void TimelineProgress(float Value);
+	void SetBoardRotation(float Value);
 
 protected:
-	FTimeline CurveTimeline;
+	FTimeline TargetTimeline;
 
 	UPROPERTY(EditAnywhere, Category="Timeline")
-	class UCurveFloat* CurveFloat;
+	class UCurveFloat* DegreeCurve;
 	
 private:
 	UPROPERTY(VisibleAnywhere)
